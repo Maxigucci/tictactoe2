@@ -4,27 +4,28 @@
     <meta charset="UTF-8">
     <title>Page title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-   
 </head>
 <body>
     <div class="main">
-        <header><h1>TIC-TAC-TOE</h1></header>
+        <header><h2>TIC•TAC•TOE</h2></header>
         <div class="gamersInfo">
             <div class="playerInfo">
-                <div class="playerCharacter" id="personCharacter">X</div>
-                <div class="playerMain">
-                    <div class="playerName">YOU</div>                   
-                    <div class="score" id="personScore">0</div>
-                </div>
+              <div class="playerName">YOU</div>           
+              <div class="score" id="personScore">0</div>
+              <div class="playerCharacter" id="personCharacter">X</div>
             </div>
             <div class="playerInfo">
-                <div class="playerMain">
-                    <div class="playerName">BOT</div>               
-                    <div class="score" id="botScore">0</div>
-                </div>
-                <div class="playerCharacter" id="botCharacter">O</div>
+              <div class="playerName">BOT</div>               
+              <div class="score" id="botScore">0</div>
+              <div class="playerCharacter" id="botCharacter">O</div>
             </div>
+        </div>
+        <div class="gameStatusBox">
+            <hr />
+            <div class="message" id="gameStatus">Your turn</div>
+            <div class="round">ROUND <span id="round">1</span></div>
         </div>
         <div class="gameMain">
             <div class="board">
@@ -39,27 +40,21 @@
                 <div class="cell" id="tile9"></div>
             </div>
         </div>
-        <div class="gameStatusBox">
-            <div class="gameStatusHead">
-                <div class="title">STATUS</div>
-                <div class="round">ROUND <span id="round">1</span></div>
-            </div>
-            <div class="message" id="gameStatus"></div>
+        
+        <div class="setCharacter" id="charactersBox">
+          <div id="characterError">Please Choose Your Character</div>
+          <div class="main">
+              <div class="title">Select Character</div>
+              <div class="buttons">
+                  <button id="x" >X</button>
+                  <button id="o" >O</button>
+              </div>
+              <div class="start">
+                  <button id="start">START</button>
+              </div>
+          </div>
         </div>
-    </div>
-    
-    <div class="setCharacter" id="charactersBox">
-        <div class="main">
-            <div class="title">Select Character</div>
-            <div class="buttons">
-                <button id="x" >X</button>
-                <button id="o" >O</button>
-            </div>
-            <div class="start">
-                <button id="start">Start</button>
-                <div id="characterError"></div>
-            </div>
-        </div>
+        
     </div>
         
     <script src="script.js"></script>

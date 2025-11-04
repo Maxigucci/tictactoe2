@@ -1,6 +1,33 @@
+/**
+let mainBox= document.querySelector(".main");
 
+function resizeCanvas(){
+    const ratioWidth = 3; 
+    const ratioHeight = 4;
+    const longestSideScreenRatio = 1;
+    const canvasAspectRatio = ratioWidth / ratioHeight;
+    const windowAspectRatio = window.innerWidth / window.innerHeight;
+    let canvasWidth = 0; 
+    let canvasHeight = 0;
+
+    if(windowAspectRatio > canvasAspectRatio){
+      canvasHeight = ( (window.innerHeight * longestSideScreenRatio) > 768)? 761: window.innerHeight * longestSideScreenRatio;
+      canvasWidth = (canvasHeight / ratioHeight) * ratioWidth;
+    } else {
+      canvasWidth = ( (window.innerWidth * longestSideScreenRatio) > 576)? 576: window.innerWidth * longestSideScreenRatio;
+      canvasHeight = (canvasWidth / ratioWidth) * ratioHeight;
+    }
+    //console.log(window.innerWidth)
+
+    //set canvas DOM height & width
+    mainBox.style.width = `${canvasWidth}px`;
+    mainBox.style.height = `${canvasHeight}px`;
+}
+
+window.addEventListener("resize", resizeCanvas)
+**/
 window.addEventListener("load", function(){
-     var gameRound = 0;
+     var gameRound = 1;
      
      const round = document.getElementById("round");
 
@@ -24,9 +51,6 @@ window.addEventListener("load", function(){
      function updateGameStatus(statusIndex){
          gameStatus.innerHTML = statusMessages[statusIndex];
      }
-
-     
-
 
      class Player{
               constructor(character,score, characterHTML, scoreHTML, tiles, axis, prospectTiles, targetAxis, targetTiles){
@@ -53,8 +77,8 @@ class Character {
               }
           }
           
-          var X = new Character("X", "#FF4500");
-          var O = new Character("O", "#9932CC")
+          var X = new Character("X", "#DD3C3C");
+          var O = new Character("O", "#3CDD8C")
           var none = new Character("s", "#4169E1");
      
           var person = new Player(none, 0, document.getElementById("personCharacter"), document.getElementById("personScore"), [], [], [], [], []);
@@ -83,10 +107,14 @@ const characters = [X,O];
     Xhtml.addEventListener("click", function(){
         characterError.innerHTML = "";
         setCharacter(person, X)
+        Xhtml.style.border=` solid 2px ${Xhtml.style.color}`
+        Ohtml.style.border="none"
     });
     Ohtml.addEventListener("click", function(){
         characterError.innerHTML = "";
         setCharacter(person, O)
+        Ohtml.style.border=` solid 2px ${Ohtml.style.color}`
+        Xhtml.style.border="none"
     });
     
     
@@ -157,16 +185,17 @@ const characters = [X,O];
      
      function toggleNextTurn(){
          startNextRound = !startNextRound;
+         console.log("newTurn");
      }
      
-     function initialize(){      
+     function initialize(){ 
          toggleNextTurn();
          freeTiles = [tile1, tile2, tile3, tile4, tile5, tile6, tile7, tile8, tile9];
          gameStatus.innerHTML = ""
          winnerDeclared = false;
          for(element of gameTiles){
                  element.innerHTML = "";
-                 element.style.background = "#FFFFFF"
+                 element.style.background = "#313135"
          }
          resetParameters();
      }
@@ -183,6 +212,7 @@ const characters = [X,O];
          if(freeTiles.length == 0){
              updateRound();   
              if(winnerDeclared == false){
+                 //Draw
                  updateGameStatus(0);
              }
              reStart();                  
@@ -297,7 +327,7 @@ const characters = [X,O];
         gameOn = true;
         if(startNextRound){
             updateGameStatus(4);
-            randomIndex = Math.floor(Math.random()*1);
+            randomIndex = Math.round(Math.random());
             setCharacter(bot, characters[randomIndex]);
             botPlay();
             controlsActive = true;           
@@ -345,9 +375,9 @@ const characters = [X,O];
         if(person.character != none){
             charactersBox.style.visibility = "hidden";
         }else{
-            characterError.innerHTML = "Please Choose Your Character";
+            characterError.style.display = "block";
             timeout = setTimeout(function(){
-                characterError.innerHTML = "";
+                characterError.style.display = "none";
             }, 1500)
             
         }
