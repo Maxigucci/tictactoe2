@@ -1,36 +1,9 @@
-/**
-let mainBox= document.querySelector(".main");
-
-function resizeCanvas(){
-    const ratioWidth = 3; 
-    const ratioHeight = 4;
-    const longestSideScreenRatio = 1;
-    const canvasAspectRatio = ratioWidth / ratioHeight;
-    const windowAspectRatio = window.innerWidth / window.innerHeight;
-    let canvasWidth = 0; 
-    let canvasHeight = 0;
-
-    if(windowAspectRatio > canvasAspectRatio){
-      canvasHeight = ( (window.innerHeight * longestSideScreenRatio) > 768)? 761: window.innerHeight * longestSideScreenRatio;
-      canvasWidth = (canvasHeight / ratioHeight) * ratioWidth;
-    } else {
-      canvasWidth = ( (window.innerWidth * longestSideScreenRatio) > 576)? 576: window.innerWidth * longestSideScreenRatio;
-      canvasHeight = (canvasWidth / ratioWidth) * ratioHeight;
-    }
-    //console.log(window.innerWidth)
-
-    //set canvas DOM height & width
-    mainBox.style.width = `${canvasWidth}px`;
-    mainBox.style.height = `${canvasHeight}px`;
-}
-
-window.addEventListener("resize", resizeCanvas)
-**/
 window.addEventListener("load", function(){
      var gameRound = 1;
+     var drawScore = 0;
      
      const round = document.getElementById("round");
-
+     const drawScoreBox= document.getElementById("drawScore")
      const charactersBox = document.getElementById("charactersBox");
      const Xhtml = document.getElementById("x");
      const Ohtml = document.getElementById("o");
@@ -109,12 +82,14 @@ const characters = [X,O];
         setCharacter(person, X)
         Xhtml.style.border=` solid 2px ${Xhtml.style.color}`
         Ohtml.style.border="none"
+        startButton.innerHTML="START"
     });
     Ohtml.addEventListener("click", function(){
         characterError.innerHTML = "";
         setCharacter(person, O)
         Ohtml.style.border=` solid 2px ${Ohtml.style.color}`
         Xhtml.style.border="none"
+        startButton.innerHTML="START"
     });
     
     
@@ -185,7 +160,6 @@ const characters = [X,O];
      
      function toggleNextTurn(){
          startNextRound = !startNextRound;
-         console.log("newTurn");
      }
      
      function initialize(){ 
@@ -203,19 +177,22 @@ const characters = [X,O];
      function reStart(){
          controlsActive = false;
          restartTimeout = setTimeout(function(){
-                 initialize();                        
+                 initialize();
+                 updateRound();
                  start();
              }, 2000);
      }
      
      function checkEnd(){
          if(freeTiles.length == 0){
-             updateRound();   
              if(winnerDeclared == false){
                  //Draw
                  updateGameStatus(0);
+                 drawScore+=1;
+                 drawScoreBox.innerHTML= drawScore;
              }
-             reStart();                  
+             reStart();       
+             console.log(`new round ${gameRound} from CheckEnd`)
          }
     }
      //check
@@ -306,9 +283,9 @@ const characters = [X,O];
                     updateGameStatus(2);
                 }
                 player.updateScore();
-                updateRound();
-                gameOn = false;               
+                gameOn = false;         
                 reStart();
+                console.log(`new round ${gameRound} from CheckTarget`)
             }           
             
         }
@@ -325,7 +302,9 @@ const characters = [X,O];
     
     function start(){
         gameOn = true;
+        winnerDeclared = false;
         if(startNextRound){
+            charactersBox.style.visibility = "hidden";
             updateGameStatus(4);
             randomIndex = Math.round(Math.random());
             setCharacter(bot, characters[randomIndex]);
@@ -345,12 +324,13 @@ const characters = [X,O];
             person.tiles.push(tile)
             removeTile(tile);
             updateParameters(person);          
-            updateParameters(bot);
+            
             if(winnerDeclared == false){
+                updateParameters(bot);
                 updateGameStatus(4)
+                botPlay();    
+                checkEnd();
             }
-            checkEnd();
-            botPlay();                
             
         }
     }
@@ -364,8 +344,9 @@ const characters = [X,O];
                 controlsActive = true;
                 if(winnerDeclared == false){
                     updateGameStatus(3)
+                    checkEnd();      
                 }
-                checkEnd();               
+                         
             }, 1000);
                      
         }
@@ -374,6 +355,9 @@ const characters = [X,O];
     startButton.addEventListener("click", function(){
         if(person.character != none){
             charactersBox.style.visibility = "hidden";
+            Ohtml.style.border="none";
+            Xhtml.style.border="none";
+            startButton.innerHTML="CONTINUE";
         }else{
             characterError.style.display = "block";
             timeout = setTimeout(function(){
